@@ -1,0 +1,75 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{cite}
+
+\title{\Large \bf Learning-Augmented OS Heuristics: Classical Algorithms Meet Adaptive Prediction}
+\author{CSE-307 Operating Systems Term Paper \\ Track 1: Learned Page Replacement}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Page replacement is a critical component of modern operating system memory management. While classic heuristics like LRU and FIFO are computationally simple and provide reasonable performance, they struggle to adapt to volatile and unpredictable workloads. In contrast, the Optimal (Belady's) algorithm provides a theoretical upper bound by leveraging future memory accesses but cannot be realized in practice. This paper presents a research prototype that explores a ``Learning-Augmented" heuristic using a lightweight machine learning Decision Tree model. The model is trained to predict the optimal eviction candidate using strictly historical features. We evaluate the proposed learned policy alongside FIFO, LRU, and Optimal algorithms on a synthetic trace featuring a deliberate workload shift from sequential locality to random bursty accesses. The results demonstrate that the learned policy outperforms classic heuristics by adapting to local patterns but suffers similar degradation when exposed to purely random accesses. 
+\end{abstract}
+
+\section{Introduction}
+Operating systems rely on page replacement policies to manage the limited resource of physical memory. When memory is full, the OS must decide which page to evict to make room for a newly requested page. Traditional algorithms, such as First-In-First-Out (FIFO) and Least Recently Used (LRU), rely on static heuristics. While LRU effectively exploits temporal locality, it is completely rigid in its approach \cite{denning1970virtual}. The Optimal replacement algorithm, originally proposed by Belady, provides a theoretical lower bound on page faults by evicting the page whose next use is farthest in the future \cite{belady1966study}. Because the OS cannot foresee the future, the Optimal algorithm remains an offline baseline.
+
+Recent research has explored augmenting classical OS heuristics with machine learning to approximate optimal decisions using historical context \cite{mitzenmacher2018model}. This project investigates whether a lightweight Decision Tree classifier can accurately predict the eviction candidate of the Optimal algorithm without requiring future knowledge during deployment.
+
+\section{Methodology}
+
+\subsection{Classical Algorithms}
+We implemented three classical algorithms:
+\begin{itemize}
+    \item \textbf{FIFO}: Evicts the oldest page present in memory.
+    \item \textbf{LRU}: Evicts the page that has not been accessed for the longest time.
+    \item \textbf{Optimal}: Evicts the page that will not be needed for the longest time in the future.
+\end{itemize}
+
+\subsection{Learned Component}
+The learned policy uses a \textit{Decision Tree Classifier} trained to act as an eviction predictor. To prevent data leakage, the model is trained entirely on a separate synthetic trace. 
+During training, the Optimal algorithm is simulated. Whenever an eviction is required, a feature vector is calculated for every resident page, and a label of $1$ is assigned to the candidate chosen by the Optimal policy (and $0$ for all others). 
+The feature vector is strictly limited to past and present information:
+\begin{itemize}
+    \item \textit{Recency}: Accesses since last reference.
+    \item \textit{Frequency}: Number of accesses in a rolling window.
+    \item \textit{Global Frequency}: Total accesses.
+    \item \textit{Age}: Steps since entering memory.
+\end{itemize}
+During evaluation, the model scores each resident page using its current features, and the highest-scoring page is evicted.
+
+\section{Experimental Setup}
+Experiments were conducted using a synthetic trace of $10,000$ accesses across a $100$-page virtual address space. To test adaptability, a deliberate \textit{workload shift} occurs at access $5,000$:
+\begin{itemize}
+    \item \textbf{Phase 1 (Locality)}: High locality accesses over a small working set (20 pages).
+    \item \textbf{Phase 2 (Random)}: Uniformly random accesses across the entire 100-page space.
+\end{itemize}
+Policies were tested using 5, 10, and 20 memory frames.
+
+\section{Results and Analysis}
+
+\subsection{Overall Performance}
+Across the full $10,000$ access trace with $10$ memory frames, the Learned policy recorded a hit ratio of $0.2883$, outperforming both FIFO ($0.2216$) and LRU ($0.2199$). As expected, the Optimal baseline maintained the highest hit ratio at $0.5093$. 
+
+\subsection{Analysis of Workload Shift}
+The workload shift clearly delineates algorithm performance. During Phase 1, the Learned policy adapted strongly to the locality, achieving a hit ratio of $0.4772$, compared to $0.3458$ for LRU. However, upon the shift to Phase 2 (random accesses), all algorithms suffered a severe degradation. The Learned policy's hit ratio plummeted to $0.0994$, slightly above FIFO ($0.0920$) and LRU ($0.0940$). 
+
+This indicates that the Decision Tree successfully identified the repeating working-set patterns in Phase 1, mimicking the Optimal algorithm's foresight. In Phase 2, because the accesses were entirely random, historical features offered no predictive power regarding future accesses, reducing the Learned policy to performance comparable to classical random guessing.
+
+\section{Limitations}
+The primary limitation of the learned approach is inference overhead. While classic algorithms like LRU operate in $O(1)$ time per fault using linked lists, the Learned policy must calculate features and perform tree traversal for every resident page during an eviction. Furthermore, as shown by Phase 2, learned heuristics cannot overcome theoretically unpredictable workloads.
+
+\section{Conclusion}
+This study successfully implemented a learning-augmented page replacement algorithm that outperformed static heuristics under patterned workloads. By training a lightweight Decision Tree on optimal eviction decisions, the policy adapted to local access behaviors. However, the abrupt workload shift demonstrated that machine learning heuristics are ultimately bound by the predictability of the underlying workload.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

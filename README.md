@@ -51,15 +51,21 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Run
-Run the full experiment:
+## How to Run
+
+You only need **two simple commands**:
+
+### 1. Run the Full Experiment Benchmark
+Runs the 10,000-access page replacement simulation across 5, 10, and 20 frames, compares all algorithms, and saves the output charts to `results/figures/`:
 ```bash
-python src/experiment.py
+./run.sh
 ```
 
-Run a quick interactive terminal demo:
+### 2. Run the Quick Test Experiment
+Runs a lightweight simulation of 1,000 accesses with the workload shift and displays a fast comparison table:
 ```bash
-python demo/demo.py
+./run.sh quick
+# (or: python src/quick_test.py)
 ```
 
 ## Results
@@ -72,12 +78,45 @@ Visualizations are saved in `results/figures/`:
 
 On 10 memory frames, the Learned policy achieves an overall hit ratio of 0.2883, outperforming both FIFO (0.2216) and LRU (0.2199). During Phase 1, the Learned policy adapted well to the locality (hit ratio 0.4772), but degraded in Phase 2 during the random workload (hit ratio 0.0994), heavily mirroring the baseline optimal degradation pattern.
 
+## Bonus Track — Explanation Confidence
+This project implements the optional Explanation Confidence bonus track. A **rule-based template generator** (no external API required) produces a short natural-language explanation of each algorithm's eviction decision at every step, along with a self-rated confidence score (0.0–1.0).
+
+### How It Works
+- **Template Engine** (`src/explanation_engine.py`): Each algorithm (FIFO, LRU, Optimal, Learned) has a dedicated explainer class that generates human-readable text describing *why* a particular page was evicted and computes a confidence score from domain-specific heuristics:
+  - **FIFO**: Confidence decreases with higher recent page diversity (many unique pages → FIFO is a worse heuristic).
+  - **LRU**: Confidence scales with the recency "dominance gap" between the victim and the runner-up, penalised by high workload diversity.
+  - **Optimal**: Confidence is always near 1.0 (perfect future knowledge).
+  - **Learned**: Confidence is derived from the model's eviction probability and the margin over the runner-up candidate.
+- **Ground-Truth Comparison**: Each eviction is compared against the Optimal baseline to determine whether it was "correct".
+- **Calibration Analysis**: The Expected Calibration Error (ECE), overconfidence %, and per-bucket accuracy are computed and visualised.
+
+### Running the Bonus Track
+The confidence experiment runs automatically as part of the main experiment:
+```bash
+python src/experiment.py
+```
+
+Or run it standalone:
+```bash
+python src/confidence_experiment.py
+```
+
+### Bonus Track Outputs
+- `results/tables/confidence_summary.csv` — Aggregate metrics (accuracy, mean confidence, ECE, overconfidence %).
+- `results/tables/confidence_calibration.csv` — Per-bucket calibration data.
+- `results/confidence_sample_explanations.txt` — Sample natural-language explanations for each algorithm.
+- `results/figures/figure4_confidence_calibration.png` — Calibration diagram (confidence vs accuracy scatter).
+- `results/figures/figure5_confidence_vs_accuracy.png` — Bar chart comparing actual accuracy to self-rated confidence.
+- `results/figures/figure6_confidence_distributions.png` — Histograms of confidence score distributions.
+
 ## Repository Structure
 - `src/`: Python source code (algorithms, workload generator, features).
+  - `src/experiment.py`: Main benchmark simulation runner.
+  - `src/quick_test.py`: Fast lightweight simulation script (1,000 accesses).
+  - `src/explanation_engine.py`: Rule-based explanation and confidence generator (Bonus Track).
+  - `src/confidence_experiment.py`: Standalone experiment runner for the Bonus Track.
 - `data/`: Traces.
 - `results/`: Output CSV tables and matplotlib figures.
-- `report/`: LaTeX source for the 3-page term paper.
-- `demo/`: Lightweight terminal demo script.
 
 ## AI Assistance Disclosure
-AI coding assistants were used to support implementation, debugging, and documentation. The experimental design, execution, results, interpretation, and final analysis were independently reviewed and understood by the author.
+Google Antigravity was used as an AI coding assistant for code implementation and debugging assistance, in accordance with Section 2 of the course brief. All experimental design, workload parameters, results interpretation, and final analysis were independently conducted and verified by the author.

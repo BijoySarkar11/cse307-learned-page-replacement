@@ -1,0 +1,5 @@
+Algorithm,Eviction Events,Comparable Events,Accuracy vs Optimal,Mean Confidence,Overconfident %,Underconfident %,ECE
+FIFO,7774,4879,0.026,0.5504,100.0,0.0,0.5243
+LRU,7791,4897,0.02,0.7412,100.0,0.0,0.7212
+Optimal,4897,4897,1.0,0.943,0.0,100.0,0.057
+Learned,7107,3830,0.458,0.5709,92.19,7.81,0.1324

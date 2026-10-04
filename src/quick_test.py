@@ -1,7 +1,8 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../src'))
+# Ensure current src directory is in Python path
+sys.path.append(os.path.dirname(__file__))
 
 from workload_generator import generate_training_and_evaluation_traces
 from page_replacement import FIFO, LRU, Optimal
@@ -10,7 +11,7 @@ from evaluation import calculate_metrics
 
 def main():
     print("\n" + "="*50)
-    print("DEMO: Learning-Augmented Page Replacement")
+    print("QUICK TEST: Learning-Augmented Page Replacement")
     print("="*50)
     
     print("\n1. Explaining the Project:")

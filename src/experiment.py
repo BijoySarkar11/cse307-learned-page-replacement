@@ -26,9 +26,13 @@ def run_experiment():
     print(f"Shift point: {SHIFT_POINT}")
     print(f"Frames evaluated: {FRAMES_LIST}")
 
-    os.makedirs("../data/traces", exist_ok=True)
-    os.makedirs("../results/tables", exist_ok=True)
-    os.makedirs("../results/figures", exist_ok=True)
+    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
+    DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+
+    os.makedirs(os.path.join(DATA_DIR, "traces"), exist_ok=True)
+    os.makedirs(os.path.join(RESULTS_DIR, "tables"), exist_ok=True)
+    os.makedirs(os.path.join(RESULTS_DIR, "figures"), exist_ok=True)
 
     # 1. Generate Traces
     print("\nGenerating traces...")
@@ -36,7 +40,7 @@ def run_experiment():
         TOTAL_ACCESSES, NUM_PAGES, SHIFT_POINT, eval_seed=EVAL_SEED, train_seed=TRAIN_SEED
     )
     
-    eval_df.to_csv("../data/traces/trace.csv", index=False)
+    eval_df.to_csv(os.path.join(DATA_DIR, "traces", "trace.csv"), index=False)
     
     eval_trace = eval_df["page"].tolist()
     phase_labels = eval_df["phase"].tolist()
@@ -105,11 +109,11 @@ def run_experiment():
     final_metrics_df = pd.concat(all_metrics, ignore_index=True)
     
     # Save CSVs
-    final_metrics_df.to_csv("../results/raw_results.csv", index=False)
+    final_metrics_df.to_csv(os.path.join(RESULTS_DIR, "raw_results.csv"), index=False)
     summary_df = final_metrics_df[final_metrics_df["Phase"] == "Full Trace"]
-    summary_df.to_csv("../results/tables/summary_results.csv", index=False)
+    summary_df.to_csv(os.path.join(RESULTS_DIR, "tables", "summary_results.csv"), index=False)
     phase_df = final_metrics_df[final_metrics_df["Phase"] != "Full Trace"]
-    phase_df.to_csv("../results/tables/phase_results.csv", index=False)
+    phase_df.to_csv(os.path.join(RESULTS_DIR, "tables", "phase_results.csv"), index=False)
 
     print("\nPHASE COMPARISON (Frames = 10)")
     print("-" * 50)
@@ -133,7 +137,7 @@ def run_experiment():
     plt.ylim(0, 1.0)
     for i, v in enumerate(full_hrs):
         plt.text(i, v + 0.02, f"{v:.2f}", ha='center')
-    plt.savefig("../results/figures/figure1_hit_ratio.png")
+    plt.savefig(os.path.join(RESULTS_DIR, "figures", "figure1_hit_ratio.png"))
     plt.close()
 
     # FIGURE 2: Page faults over time
@@ -147,7 +151,7 @@ def run_experiment():
     plt.ylabel('Cumulative Page Faults')
     plt.legend()
     plt.grid(True)
-    plt.savefig("../results/figures/figure2_cumulative_faults.png")
+    plt.savefig(os.path.join(RESULTS_DIR, "figures", "figure2_cumulative_faults.png"))
     plt.close()
 
     # FIGURE 3: Before vs after shift
@@ -166,7 +170,7 @@ def run_experiment():
     plt.xticks(x, names)
     plt.legend()
     plt.ylim(0, 1.0)
-    plt.savefig("../results/figures/figure3_phase_shift.png")
+    plt.savefig(os.path.join(RESULTS_DIR, "figures", "figure3_phase_shift.png"))
     plt.close()
 
     print("\n==================================================")
@@ -175,6 +179,11 @@ def run_experiment():
     print("Figures saved to:")
     print("results/figures/")
     print("==================================================")
+
+    # --- Bonus Track: Explanation Confidence ---
+    print("\n")
+    from confidence_experiment import run_confidence_experiment
+    run_confidence_experiment()
 
 if __name__ == "__main__":
     run_experiment()

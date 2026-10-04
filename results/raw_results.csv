@@ -1,0 +1,37 @@
+Policy,Frames,Phase,Hits,Faults,Hit Ratio
+FIFO,5,Phase 1 (Locality),608,4392,0.1216
+FIFO,5,Phase 2 (Random),234,4766,0.0468
+FIFO,5,Full Trace,842,9158,0.0842
+LRU,5,Phase 1 (Locality),601,4399,0.1202
+LRU,5,Phase 2 (Random),233,4767,0.0466
+LRU,5,Full Trace,834,9166,0.0834
+Optimal,5,Phase 1 (Locality),1956,3044,0.3912
+Optimal,5,Phase 2 (Random),1083,3917,0.2166
+Optimal,5,Full Trace,3039,6961,0.3039
+Learned,5,Phase 1 (Locality),1093,3907,0.2186
+Learned,5,Phase 2 (Random),247,4753,0.0494
+Learned,5,Full Trace,1340,8660,0.134
+FIFO,10,Phase 1 (Locality),1756,3244,0.3512
+FIFO,10,Phase 2 (Random),460,4540,0.092
+FIFO,10,Full Trace,2216,7784,0.2216
+LRU,10,Phase 1 (Locality),1729,3271,0.3458
+LRU,10,Phase 2 (Random),470,4530,0.094
+LRU,10,Full Trace,2199,7801,0.2199
+Optimal,10,Phase 1 (Locality),3357,1643,0.6714
+Optimal,10,Phase 2 (Random),1736,3264,0.3472
+Optimal,10,Full Trace,5093,4907,0.5093
+Learned,10,Phase 1 (Locality),2386,2614,0.4772
+Learned,10,Phase 2 (Random),497,4503,0.0994
+Learned,10,Full Trace,2883,7117,0.2883
+FIFO,20,Phase 1 (Locality),4980,20,0.996
+FIFO,20,Phase 2 (Random),985,4015,0.197
+FIFO,20,Full Trace,5965,4035,0.5965
+LRU,20,Phase 1 (Locality),4980,20,0.996
+LRU,20,Phase 2 (Random),985,4015,0.197
+LRU,20,Full Trace,5965,4035,0.5965
+Optimal,20,Phase 1 (Locality),4980,20,0.996
+Optimal,20,Phase 2 (Random),2564,2436,0.5128
+Optimal,20,Full Trace,7544,2456,0.7544
+Learned,20,Phase 1 (Locality),4980,20,0.996
+Learned,20,Phase 2 (Random),977,4023,0.1954
+Learned,20,Full Trace,5957,4043,0.5957

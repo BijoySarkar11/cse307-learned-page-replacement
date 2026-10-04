@@ -1,0 +1,13 @@
+Policy,Frames,Phase,Hits,Faults,Hit Ratio
+FIFO,5,Full Trace,842,9158,0.0842
+LRU,5,Full Trace,834,9166,0.0834
+Optimal,5,Full Trace,3039,6961,0.3039
+Learned,5,Full Trace,1340,8660,0.134
+FIFO,10,Full Trace,2216,7784,0.2216
+LRU,10,Full Trace,2199,7801,0.2199
+Optimal,10,Full Trace,5093,4907,0.5093
+Learned,10,Full Trace,2883,7117,0.2883
+FIFO,20,Full Trace,5965,4035,0.5965
+LRU,20,Full Trace,5965,4035,0.5965
+Optimal,20,Full Trace,7544,2456,0.7544
+Learned,20,Full Trace,5957,4043,0.5957

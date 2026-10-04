@@ -1,0 +1,100 @@
+
+======================================================================
+ FIFO — Sample Explanations (first 5 eviction events)
+======================================================================
+
+  Step 10: Request page 19
+  → FIFO evicts page 1 because it was the first page loaded into memory (position 1/10 in arrival order). Page 19 needs a frame, so the oldest resident is removed.
+  Confidence: 0.9550  |  Correct: ✗ INCORRECT  (Optimal would evict page 18)
+
+  Step 11: Request page 0
+  → FIFO evicts page 10 because it was the first page loaded into memory (position 1/10 in arrival order). Page 0 needs a frame, so the oldest resident is removed.
+  Confidence: 0.9100  |  Correct: ✗ INCORRECT  (Optimal would evict page 19)
+
+  Step 12: Request page 1
+  → FIFO evicts page 11 because it was the first page loaded into memory (position 1/10 in arrival order). Page 1 needs a frame, so the oldest resident is removed.
+  Confidence: 0.8650  |  Correct: N/A
+
+  Step 13: Request page 2
+  → FIFO evicts page 12 because it was the first page loaded into memory (position 1/10 in arrival order). Page 2 needs a frame, so the oldest resident is removed.
+  Confidence: 0.8200  |  Correct: ✗ INCORRECT  (Optimal would evict page 1)
+
+  Step 14: Request page 3
+  → FIFO evicts page 13 because it was the first page loaded into memory (position 1/10 in arrival order). Page 3 needs a frame, so the oldest resident is removed.
+  Confidence: 0.7750  |  Correct: ✗ INCORRECT  (Optimal would evict page 2)
+
+
+======================================================================
+ LRU — Sample Explanations (first 5 eviction events)
+======================================================================
+
+  Step 10: Request page 19
+  → LRU evicts page 1 because it has not been accessed for 10 time steps — the longest gap among all 10 resident pages. Page 19 replaces it.
+  Confidence: 0.5779  |  Correct: ✗ INCORRECT  (Optimal would evict page 18)
+
+  Step 11: Request page 0
+  → LRU evicts page 10 because it has not been accessed for 10 time steps — the longest gap among all 10 resident pages. Page 0 replaces it.
+  Confidence: 0.6038  |  Correct: ✗ INCORRECT  (Optimal would evict page 19)
+
+  Step 12: Request page 1
+  → LRU evicts page 11 because it has not been accessed for 10 time steps — the longest gap among all 10 resident pages. Page 1 replaces it.
+  Confidence: 0.6276  |  Correct: N/A
+
+  Step 13: Request page 2
+  → LRU evicts page 12 because it has not been accessed for 10 time steps — the longest gap among all 10 resident pages. Page 2 replaces it.
+  Confidence: 0.6492  |  Correct: ✗ INCORRECT  (Optimal would evict page 1)
+
+  Step 14: Request page 3
+  → LRU evicts page 13 because it has not been accessed for 10 time steps — the longest gap among all 10 resident pages. Page 3 replaces it.
+  Confidence: 0.6687  |  Correct: ✗ INCORRECT  (Optimal would evict page 2)
+
+
+======================================================================
+ Optimal — Sample Explanations (first 5 eviction events)
+======================================================================
+
+  Step 10: Request page 19
+  → Optimal evicts page 18 because its next use is 29 — the farthest (or nonexistent) future reference among all 10 resident pages. This is provably the best choice.
+  Confidence: 0.9160  |  Correct: ✓ CORRECT
+
+  Step 11: Request page 0
+  → Optimal evicts page 19 because its next use is 30 — the farthest (or nonexistent) future reference among all 10 resident pages. This is provably the best choice.
+  Confidence: 0.9160  |  Correct: ✓ CORRECT
+
+  Step 13: Request page 2
+  → Optimal evicts page 1 because its next use is 60 — the farthest (or nonexistent) future reference among all 10 resident pages. This is provably the best choice.
+  Confidence: 0.9320  |  Correct: ✓ CORRECT
+
+  Step 14: Request page 3
+  → Optimal evicts page 2 because its next use is 39 — the farthest (or nonexistent) future reference among all 10 resident pages. This is provably the best choice.
+  Confidence: 0.9200  |  Correct: ✓ CORRECT
+
+  Step 15: Request page 4
+  → Optimal evicts page 3 because its next use is 40 — the farthest (or nonexistent) future reference among all 10 resident pages. This is provably the best choice.
+  Confidence: 0.9200  |  Correct: ✓ CORRECT
+
+
+======================================================================
+ Learned — Sample Explanations (first 5 eviction events)
+======================================================================
+
+  Step 10: Request page 19
+  → Learned policy evicts page 18 (model eviction score=0.536, features: [recency=0, frequency=1, global_frequency=1, age=0, recent_frequency=1, normalized_recency=0.0]). Among 10 candidates it had the highest predicted probability of being the optimal victim (margin over runner-up: 0.304).
+  Confidence: 0.5435  |  Correct: ✓ CORRECT
+
+  Step 11: Request page 0
+  → Learned policy evicts page 19 (model eviction score=0.536, features: [recency=0, frequency=1, global_frequency=1, age=0, recent_frequency=1, normalized_recency=0.0]). Among 10 candidates it had the highest predicted probability of being the optimal victim (margin over runner-up: 0.368).
+  Confidence: 0.5692  |  Correct: ✓ CORRECT
+
+  Step 13: Request page 2
+  → Learned policy evicts page 0 (model eviction score=0.232, features: [recency=1, frequency=1, global_frequency=1, age=1, recent_frequency=1, normalized_recency=0.0]). Among 10 candidates it had the highest predicted probability of being the optimal victim (margin over runner-up: 0.020).
+  Confidence: 0.2474  |  Correct: ✗ INCORRECT  (Optimal would evict page 1)
+
+  Step 14: Request page 3
+  → Learned policy evicts page 2 (model eviction score=0.536, features: [recency=0, frequency=1, global_frequency=1, age=0, recent_frequency=1, normalized_recency=0.0]). Among 10 candidates it had the highest predicted probability of being the optimal victim (margin over runner-up: 0.304).
+  Confidence: 0.5435  |  Correct: ✓ CORRECT
+
+  Step 15: Request page 4
+  → Learned policy evicts page 3 (model eviction score=0.536, features: [recency=0, frequency=1, global_frequency=1, age=0, recent_frequency=1, normalized_recency=0.0]). Among 10 candidates it had the highest predicted probability of being the optimal victim (margin over runner-up: 0.368).
+  Confidence: 0.5692  |  Correct: ✓ CORRECT
+

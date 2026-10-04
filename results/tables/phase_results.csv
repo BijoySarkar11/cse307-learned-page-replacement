@@ -1,0 +1,25 @@
+Policy,Frames,Phase,Hits,Faults,Hit Ratio
+FIFO,5,Phase 1 (Locality),608,4392,0.1216
+FIFO,5,Phase 2 (Random),234,4766,0.0468
+LRU,5,Phase 1 (Locality),601,4399,0.1202
+LRU,5,Phase 2 (Random),233,4767,0.0466
+Optimal,5,Phase 1 (Locality),1956,3044,0.3912
+Optimal,5,Phase 2 (Random),1083,3917,0.2166
+Learned,5,Phase 1 (Locality),1093,3907,0.2186
+Learned,5,Phase 2 (Random),247,4753,0.0494
+FIFO,10,Phase 1 (Locality),1756,3244,0.3512
+FIFO,10,Phase 2 (Random),460,4540,0.092
+LRU,10,Phase 1 (Locality),1729,3271,0.3458
+LRU,10,Phase 2 (Random),470,4530,0.094
+Optimal,10,Phase 1 (Locality),3357,1643,0.6714
+Optimal,10,Phase 2 (Random),1736,3264,0.3472
+Learned,10,Phase 1 (Locality),2386,2614,0.4772
+Learned,10,Phase 2 (Random),497,4503,0.0994
+FIFO,20,Phase 1 (Locality),4980,20,0.996
+FIFO,20,Phase 2 (Random),985,4015,0.197
+LRU,20,Phase 1 (Locality),4980,20,0.996
+LRU,20,Phase 2 (Random),985,4015,0.197
+Optimal,20,Phase 1 (Locality),4980,20,0.996
+Optimal,20,Phase 2 (Random),2564,2436,0.5128
+Learned,20,Phase 1 (Locality),4980,20,0.996
+Learned,20,Phase 2 (Random),977,4023,0.1954
